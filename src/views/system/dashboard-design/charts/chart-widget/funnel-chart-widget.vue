@@ -99,7 +99,7 @@ export default {
           return
         }
         metrics.forEach((el) => {
-          this.units[el.fieldLabel] = {
+          this.units[el.field_name] = {
             showDecimalPlaces: el.showDecimalPlaces,
             decimalPlaces: el.decimalPlaces,
             thousandsSeparator: el.thousandsSeparator,

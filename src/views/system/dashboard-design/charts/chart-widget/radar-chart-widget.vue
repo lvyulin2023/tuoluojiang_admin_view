@@ -32,26 +32,9 @@ export default {
           trigger: 'item'
         },
         radar: {
-          indicator: [
-            { name: '测试1' },
-            { name: '测试2' },
-            { name: '测试3' },
-            { name: '测试4' },
-            { name: '测试5' },
-            { name: '测试6' }
-          ]
+          indicator: []
         },
-        series: [
-          {
-            type: 'radar',
-            data: [
-              {
-                value: ['1', '6', '6', '6', '1', '1', '3'],
-                name: '公司名称'
-              }
-            ]
-          }
-        ]
+        series: []
       },
       units: {}
     }
@@ -79,7 +62,7 @@ export default {
           return
         }
         metrics.forEach((el) => {
-          this.$set(this.units, el.fieldLabel, {
+          this.$set(this.units, el.field_name, {
             showDecimalPlaces: el.showDecimalPlaces,
             decimalPlaces: el.decimalPlaces,
             thousandsSeparator: el.thousandsSeparator,
@@ -135,7 +118,7 @@ export default {
 
         this.option.radar.indicator = res.data.xAxis.map((el) => {
           return {
-            name: el
+            name: el || '--'
           }
         })
         this.isShowEmpty = false
