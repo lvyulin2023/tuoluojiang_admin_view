@@ -1,0 +1,83 @@
+import axios from 'axios'
+import store from '@/store'
+import SettingMer from '@/libs/settingMer'
+import Tips from '@/utils/tips'
+
+const instance = axios.create({
+  baseURL: SettingMer.https,
+  timeout: 60000
+})
+const defaultOpt = { login: true }
+
+function baseRequest(options) {
+  const token = store.getters.token
+  const headers = options.headers || {}
+  const lang = store.getters.lang || 'zh-cn'
+  if (token) {
+    headers['Authorization'] = 'Bearer ' + token
+  }
+  headers['laravel_lang'] = lang
+  options.headers = headers
+
+  // 后期修改成这个方法
+  return new Promise((resolve, reject) => {
+    instance(options)
+      .then((res) => {
+        const data = res.data || {}
+        if (res.status !== 200) {
+          return reject({ message: '请求失败', res, data })
+        } else if ([410000, 410001, 410002, 40000, 410003].indexOf(data.status) !== -1) {
+          store.dispatch('user/resetToken').then(() => {
+            location.pathname !== '/admin/login' && location.reload()
+          })
+        } else if (data.status === 200) {
+          if (data.tips && data.message !== 'ok') {
+            Tips.msgSuccess(data.message)
+          }
+          return resolve(data)
+        } else if (data.status === 400) {
+          if (data.tips && data.message !== 'error') {
+            Tips.msgError(data.message)
+          }
+          return resolve(data, res)
+        } else if (data.status === 410005) {
+        } else {
+          return reject({ message: data.message, res, data })
+        }
+      })
+      .catch((message) => reject({ message }))
+  })
+}
+/**
+ * http 请求基础类
+ * 参考文档 https://www.kancloud.cn/yunye/axios/234845
+ *
+ */
+const request = ['post', 'put', 'patch', 'delete'].reduce((request, method) => {
+  /**
+   *
+   * @param url string 接口地址
+   * @param data object get参数
+   * @param options object axios 配置项
+   * @returns {AxiosPromise}
+   */
+  request[method] = (url, data = {}, options = {}) => {
+    return baseRequest(Object.assign({ url, data, method }, defaultOpt, options))
+  }
+  return request
+}, {})
+
+;['get', 'head'].forEach((method) => {
+  /**
+   *
+   * @param url string 接口地址
+   * @param params object get参数
+   * @param options object axios 配置项
+   * @returns {AxiosPromise}
+   */
+  request[method] = (url, params = {}, options = {}) => {
+    return baseRequest(Object.assign({ url, params, method }, defaultOpt, options))
+  }
+})
+
+export default request
