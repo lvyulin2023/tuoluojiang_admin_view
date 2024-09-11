@@ -10,7 +10,7 @@ function resolve(dir) {
 
 const name = defaultSettings.title || 'vue Element Admin'; // page title
 
-const port = process.env.port || process.env.npm_config_port || 9527; // dev port
+const port = process.env.port || process.env.npm_config_port || 3000; // dev port
 
 module.exports = {
   publicPath: defaultSettings.roterPre + '/',
@@ -69,7 +69,7 @@ module.exports = {
       })
       .end();
 
-  
+
     config.module
       .rule('vue')
       .use('vue-loader')
