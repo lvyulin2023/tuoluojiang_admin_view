@@ -17,11 +17,6 @@ Vue2 + Vuex + Vue-router + Webpack + ES6/7 + Axios + ElementUI + 阿里图标ico
 
 ## 开发规范
 统一使用 ES6 语法
-- th => 表头
-- data => 数据
-- fileName => 文件名
-- fileType => 文件类型
-- sheetName => sheet 页名
 
 ### 命名
 页面目录 文件夹命名格式骆驼式命名法,例如：用户列表 userList
@@ -242,7 +237,7 @@ $ npm install
 
 # 启动项目(本地开发环境,修改文件.env.development中api地址)
 $ npm run dev
-访问：http://localhost:3000/admin/  进入后台
+# 访问：http://localhost:3000/admin/
 
 # 打包项目
 $ npm run build:prod
